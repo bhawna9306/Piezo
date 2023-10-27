@@ -1,0 +1,36 @@
+const int piezoPin = A0;  // Piezoelectric sensor connected to A0
+const int buzzerPin = 2; // Buzzer connected to D2
+const int numReadings = 10; // Number of readings to average
+
+void setup() {
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensorValue = 0;
+
+  // Take multiple readings and average them
+  for (int i = 0; i < numReadings; i++) {
+    sensorValue += analogRead(piezoPin);
+    delay(20); // Small delay between readings
+  }
+
+  sensorValue /= numReadings; // Calculate the average
+
+  // You may need to adjust this threshold value based on your sensor and environment
+  int threshold = 100;
+
+  if (sensorValue > threshold) {
+    // Force applied, turn on the buzzer
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    // No force applied, turn off the buzzer
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  // Print sensor value for debugging
+  Serial.println(sensorValue);
+
+  delay(2000); // Add a small delay between readings
+}
